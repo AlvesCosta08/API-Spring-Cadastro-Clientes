@@ -60,7 +60,6 @@ public class ClienteController {
                    return clienteRepository.save(cliente);
 
                })
-               .
                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
    }
 }
