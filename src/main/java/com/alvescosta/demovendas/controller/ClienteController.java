@@ -5,6 +5,7 @@ import com.alvescosta.demovendas.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
@@ -23,6 +24,29 @@ public class ClienteController {
    public Cliente salvar(@RequestBody Cliente cliente){
         return clienteRepository.save(cliente);
    }
+ /*
+  *@Author Alves Costa
+  * @Return Metodo busca cliente por Id , caso não encontre retonar 404
+  */
+   @GetMapping("{id}")
+   public Cliente buscarPorId(@PathVariable Integer id){
+        return clienteRepository.findById(id)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+   }
 
+  /*
+   *@Author Alves Costa
+   * @Return Metodo deleta um  cliente
+   */
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+   public void deletar(@PathVariable Integer id){
+        clienteRepository.findById(id)
+                .map(cliente -> {
+                    clienteRepository.delete(cliente);
+                    return Void.TYPE;
+                })
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+   }
 
 }
